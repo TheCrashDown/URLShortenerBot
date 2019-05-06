@@ -3,6 +3,7 @@ import time
 from res_closed import TOKEN
 from res import Messages
 from url_sh import get_shorten_url
+from qr_make import get_qr_code
 
 tg_url = 'https://api.telegram.org/bot' + TOKEN + '/'
 
@@ -62,6 +63,17 @@ def send_message(chat, text):
     requests.get(_url)
 
 
+def send_pic(chat):
+    '''
+    Function that sends "img.jpg" file to Telegram with chat_id
+    '''
+    content = {'photo': open('img.jpg', 'rb')}
+
+    _url = tg_url + 'sendPhoto?chat_id={}'.format(chat)
+
+    requests.post(_url, files=content)
+
+
 def cmd_start(parsed):
     '''
     Function that sends greeting message
@@ -71,19 +83,28 @@ def cmd_start(parsed):
 
 def cmd_shorten(parsed):
     '''
-    Function that shortens source URL and sends to user
+    Function that shortens source URL and sends it to user
     '''
     space = parsed['text'].find(' ')
     source_url = parsed['text'][space::].strip()
     res = get_shorten_url(source_url)
 
-    print('debug ', res)
-    print('d2 ', 'result_url' in res)
-
     if 'result_url' in res:
         send_message(parsed['chat_id'], Messages.sh_succ + res['result_url'])
     else:
         send_message(parsed['chat_id'], Messages.invalid_url)
+
+
+def cmd_qr_code(parsed):
+    '''
+    Function that creates qr pic and sends it to user
+    '''
+    space = parsed['text'].find(' ')
+    source = parsed['text'][space::].strip()
+    get_qr_code(source)
+
+    send_message(parsed['chat_id'], Messages.qr_succ)
+    send_pic(parsed['chat_id'])
 
 
 def main():
@@ -97,7 +118,7 @@ def main():
         resp = get_updates()
         parsed = parse_resp(resp)
 
-        # if the mesage is already answered
+        # if last message is already answered
         if last_answered == parsed['message_id']:
             continue
 
@@ -106,6 +127,9 @@ def main():
 
         if parsed['text'].startswith(('/url ', '/sh ', '/shorten ')):
             cmd_shorten(parsed)
+
+        if parsed['text'].startswith('/qr'):
+            cmd_qr_code(parsed)
 
         last_answered = parsed['message_id']
 

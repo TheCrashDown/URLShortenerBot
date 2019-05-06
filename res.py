@@ -11,5 +11,6 @@ class Messages:
              '/qr *your text* - convert your text to QR pic')
     invalid_url = ('OOops...\nSeems like your URL is invalid.\n'
                    'Make sure your link looks like that:'
-                   ' https://example.com/')
+                   ' https://example.com')
     sh_succ = ('Here is your shortened link:\n')
+    qr_succ = ('Here is your qr pic:\n')
