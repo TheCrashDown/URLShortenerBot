@@ -107,11 +107,12 @@ def cmd_qr_code(parsed):
     send_pic(parsed['chat_id'])
 
 
-def main():
+if __name__ == '__main__':
     '''
     Main function, that recieves and sends messages to user
     '''
     last_answered = 0  # id of last answered message
+
     while True:
         time.sleep(1)
 
@@ -132,7 +133,3 @@ def main():
             cmd_qr_code(parsed)
 
         last_answered = parsed['message_id']
-
-
-if __name__ == '__main__':
-    main()

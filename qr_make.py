@@ -9,7 +9,7 @@ def get_qr_code(text):
         source text
 
     Returns:
-
+        none (picture with qr code is saved in "img.jpg")
     '''
     _url = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + text
 
