@@ -1,10 +1,11 @@
 import requests
 import time
-from res_closed import TOKEN
 from res import Messages
 from url_sh import get_shorten_url
 from qr_make import get_qr_code
 
+
+TOKEN = ''
 tg_url = 'https://api.telegram.org/bot' + TOKEN + '/'
 
 
@@ -63,11 +64,11 @@ def send_message(chat, text):
     requests.get(_url)
 
 
-def send_pic(chat):
+def send_pic(chat, img):
     '''
-    Function that sends "img.jpg" file to Telegram with chat_id
+    Function that sends image to Telegram with chat_id
     '''
-    content = {'photo': open('img.jpg', 'rb')}
+    content = {'photo': img}
 
     _url = tg_url + 'sendPhoto?chat_id={}'.format(chat)
 
@@ -101,16 +102,19 @@ def cmd_qr_code(parsed):
     '''
     space = parsed['text'].find(' ')
     source = parsed['text'][space::].strip()
-    get_qr_code(source)
+
+    img = get_qr_code(source)
 
     send_message(parsed['chat_id'], Messages.qr_succ)
-    send_pic(parsed['chat_id'])
+    send_pic(parsed['chat_id'], img)
 
 
 if __name__ == '__main__':
     '''
     Main function, that recieves and sends messages to user
     '''
+    TOKEN = str(open("token.txt", "r").read()).strip()
+
     last_answered = 0  # id of last answered message
 
     while True:

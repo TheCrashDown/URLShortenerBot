@@ -15,5 +15,4 @@ def get_qr_code(text):
 
     resp = requests.get(_url)
 
-    with open("img.jpg", 'wb') as f:
-        f.write(resp.content)
+    return resp.content
