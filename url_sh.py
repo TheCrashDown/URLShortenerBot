@@ -14,6 +14,9 @@ def get_shorten_url(longUrl):
     '''
     _url = 'https://cleanuri.com/api/v1/shorten'
 
+    if not longUrl.startswith(('https://', 'http://')):
+        longUrl = 'http://' + longUrl
+
     resp = requests.post(_url, data={'url': longUrl}).json()
 
     return resp
