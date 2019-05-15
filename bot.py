@@ -6,7 +6,7 @@ from qr_make import get_qr_code
 
 
 TOKEN = ''
-tg_url = 'https://api.telegram.org/bot' + TOKEN + '/'
+tg_url = 'https://api.telegram.org/bot'
 
 
 def get_updates():
@@ -113,7 +113,10 @@ if __name__ == '__main__':
     '''
     Main function, that recieves and sends messages to user
     '''
-    TOKEN = str(open("token.txt", "r").read()).strip()
+    with open("token.txt", "r") as f:
+        TOKEN = str(f.read()).strip()
+
+    tg_url += TOKEN + '/'
 
     last_answered = 0  # id of last answered message
 
